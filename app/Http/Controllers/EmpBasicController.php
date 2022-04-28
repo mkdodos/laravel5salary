@@ -38,9 +38,16 @@ class EmpBasicController extends Controller
 
 	public function basic()
 	{
+		// $rows = json_decode($this->basicData(),true);
+		// $rows = $this->basicDataJSON();
+		// return $rows;
+		// $rows ="abc";
 		return view('emp/basic');
 	}
 
+	
+	
+	
 	public function basicData()
 	{
 		$connectionString = "odbc:salary";

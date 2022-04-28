@@ -18,7 +18,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                            <tr>
                                 <td>兆豐銀行</td>
                                 <td>$300 產品（限量8萬名）<br>最高5千抽獎</td>
                                 <td>期限綁定台灣Pay/信用卡，可享一次抽獎，最高獎金5千元(110/12/31前)</td>
@@ -50,7 +50,7 @@
                     </table> -->
 
 
-                   
+
                 </div>
             </div>
         </div>
@@ -63,13 +63,12 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 <script>
+    $(document).ready(function() {
+        // $('#table_id').DataTable(); 
+    });
 
-$(document).ready( function () {
-    // $('#table_id').DataTable(); 
-} );
 
-
-     $('#table_id').DataTable();
+    $('#table_id').DataTable();
     var app = new Vue({
         el: '#app',
         data: {
@@ -81,7 +80,7 @@ $(document).ready( function () {
             axios.get('basic/data', {}).then((res) => {
                 console.log(res.data);
                 this.rows = res.data
-               
+
 
             })
 
