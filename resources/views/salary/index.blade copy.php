@@ -72,10 +72,9 @@
         },
         methods: {
             edit(row) {
-                // this.editItem = {};
                 this.editIndex = this.rows.indexOf(row);
                 console.log(this.editIndex)
-                Object.assign(this.rows[this.editIndex],{'name':'mark'})
+                Object.assign(this.rows[this.editIndex],{})
                 // $('#exampleModal').modal()
                 console.log(this.rows[this.editIndex])
             }

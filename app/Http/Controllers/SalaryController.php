@@ -38,14 +38,14 @@ class SalaryController extends Controller
 	
 
 		// $query = " SELECT 姓名,本薪,年,月 FROM 薪資紀錄表 ";
-		$query = " SELECT top 500 姓名,本薪,年,月 FROM 薪資紀錄表 ORDER BY 年 DESC,月";
+		$query = " SELECT top 500 ID,姓名,本薪,年,月 FROM 薪資紀錄表";
 // return $query;
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);		
 
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
 		// return $arr;
-		$keys = ['name', 'basic', 'y', 'm'];
+		$keys = ['id','name', 'basic', 'y', 'm'];
 		$json = "";
 
 		for ($i = 0; $i < count($arr); $i++) {
