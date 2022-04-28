@@ -41,6 +41,10 @@
 					<li><a href="{{ url('/emp/basic') }}">員工本薪</a></li>
 				</ul>
 
+				<ul class="nav navbar-nav">
+					<li><a href="{{ url('/salary/index') }}">薪資</a></li>
+				</ul>
+
 				<ul class="nav navbar-nav navbar-right">
 					@if (Auth::guest())
 					<li><a href="{{ url('/auth/login') }}">Login</a></li>
