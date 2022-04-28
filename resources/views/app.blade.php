@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,6 +19,7 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
+
 <body>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
@@ -41,15 +43,15 @@
 
 				<ul class="nav navbar-nav navbar-right">
 					@if (Auth::guest())
-						<li><a href="{{ url('/auth/login') }}">Login</a></li>
-						<li><a href="{{ url('/auth/register') }}">Register</a></li>
+					<li><a href="{{ url('/auth/login') }}">Login</a></li>
+					<li><a href="{{ url('/auth/register') }}">Register</a></li>
 					@else
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
-							</ul>
-						</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
+						</ul>
+					</li>
 					@endif
 				</ul>
 			</div>
@@ -57,12 +59,19 @@
 	</nav>
 
 	@yield('content')
-
+	
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+	
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+	<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 
-@yield('footer')
+	@yield('footer')
 
 </body>
+
 </html>
