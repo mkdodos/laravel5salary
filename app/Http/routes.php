@@ -17,5 +17,6 @@ Route::get('/emp/basic/data', 'EmpBasicController@basicData');
 // 薪資
 Route::get('/salary/index', 'SalaryController@index');
 Route::get('/salary/index/data', 'SalaryController@indexData');
+Route::post('/salary/update', 'SalaryController@update');
 
 

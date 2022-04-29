@@ -106,13 +106,16 @@
                 // console.log(this.rows[this.editIndex])
             },
             save() {
-                
+                let url = 'update';
+                let params = this.editItem
+                axios.post(url,params).then((res)=>{
+                    console.log(res.data)
+                })
                 
                 
                 Object.assign(this.rows[this.editIndex],this.editItem)
                 $('#exampleModal').modal('hide')
-                // $('#exampleModal').modal()
-                // console.log(this.rows[this.editIndex])
+               
             }
         }
     })
