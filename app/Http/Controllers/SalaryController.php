@@ -32,17 +32,18 @@ class SalaryController extends Controller
 
 	public function indexData()
 	{
-		
+
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
-		
-		$query = " SELECT top 500 ID,姓名,本薪,年,月 FROM 薪資紀錄表";
-		
+
+
+		$query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 姓名='馬克'";
+
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
 
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
-		
+
 		$keys = ['id', 'name', 'basic', 'y', 'm'];
 		$json = "";
 
@@ -53,8 +54,7 @@ class SalaryController extends Controller
 				$newarr[urlencode($keys[$j])] = urlencode(trim($value));
 				$j++;
 			}
-			// 原始日期 2022-01-05 00:00:00 將時分秒去掉    
-			// $newarr["bonusDate"] = substr( $newarr["bonusDate"] , 0 , 10 );
+			
 			$rows[$i] = $newarr;
 		}
 
@@ -70,30 +70,103 @@ class SalaryController extends Controller
 			->header('Content-Type', 'text/html;charset=big5');
 	}
 
-	public function update()
-	{		
+	public function destory()
+	{
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
-		
-		$obj = json_decode(file_get_contents('php://input'));	
-		$id = $obj->id;
-		$basic = $obj->basic;
-		
-		$sql = " UPDATE 薪資紀錄表 SET 本薪='$basic' WHERE ID=$id";
-			
 
-		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");  
+		$obj = json_decode(file_get_contents('php://input'));
+		$id = $obj->id;
+		
+		
+
+		$sql = " DELETE FROM 薪資紀錄表 WHERE ID=$id";
+
+		// return $sql;
+
+		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
 		// echo $sql;
 		// return;
-	
-		try {    
+
+		try {
 			$statement = $db->prepare($sql);
-			$statement->execute();    
+			$statement->execute();
 		} catch (PDOException $err) {
 			print_r($err->getMessage());
 		}
 
 		// return $query;
+
+	}
+
+	public function update()
+	{
+		$connectionString = "odbc:salary";
+		$db = new \PDO($connectionString);
+
+		$obj = json_decode(file_get_contents('php://input'));
+		$id = $obj->id;
+		$basic = $obj->basic;
+
+		$sql = " UPDATE 薪資紀錄表 SET 本薪='$basic' WHERE ID=$id";
+
+
+		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
+		// echo $sql;
+		// return;
+
+		try {
+			$statement = $db->prepare($sql);
+			$statement->execute();
+		} catch (PDOException $err) {
+			print_r($err->getMessage());
+		}
+
+		// return $query;
+
+	}
+	// 員工基本資料
+	private function getEmpBasic()
+	{
+		$query = " SELECT 姓名,本薪 FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
 		
+		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
+		$rs = $db->query($query);
+		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
+		return $arr;
+	}
+
+	public function insert()
+	{
+		// return $this->getEmpBasic();
+		$connectionString = "odbc:salary";
+		$db = new \PDO($connectionString);
+
+		$obj = json_decode(file_get_contents('php://input'));
+		
+		$basic = '35400';
+		$name = '馬克';
+		// return $basic;
+		$y = $obj->y;
+		$m = $obj->m;
+		
+
+		$sql = " INSERT INTO 薪資紀錄表 (年,月,姓名,本薪) VALUES ($y,$m,'$name',$basic)";
+		// $sql = " INSERT INTO 薪資紀錄表 ";
+		// return $sql;
+
+		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
+		// echo $sql;
+		// return;
+
+		try {
+			$statement = $db->prepare($sql);
+			$statement->execute();
+		} catch (PDOException $err) {
+			print_r($err->getMessage());
+		}
+
+		// return $query;
+
 	}
 }

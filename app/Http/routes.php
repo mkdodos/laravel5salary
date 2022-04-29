@@ -18,5 +18,7 @@ Route::get('/emp/basic/data', 'EmpBasicController@basicData');
 Route::get('/salary/index', 'SalaryController@index');
 Route::get('/salary/index/data', 'SalaryController@indexData');
 Route::post('/salary/update', 'SalaryController@update');
+Route::post('/salary/insert', 'SalaryController@insert');
+Route::post('/salary/destory', 'SalaryController@destory');
 
 

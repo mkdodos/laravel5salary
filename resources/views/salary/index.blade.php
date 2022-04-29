@@ -2,9 +2,12 @@
 @section('content')
 <div id="app" class="container">
     <div v-if="isLoding">載入中...</div>
+    <button type="button" class="btn btn-default" @click="insert()">轉薪資</button>
     <table v-if="!isLoding" class="display" id="table_id">
         <thead>
             <tr>
+                <th></th>
+                <th></th>
                 <th>年</th>
                 <th>月</th>
                 <th>姓名</th>
@@ -14,6 +17,8 @@
         </thead>
         <tbody>
             <tr v-for="row in rows" :key="row.id">
+                <td><button type="button" class="btn btn-link" @click="destory(row)">刪除</button></td>
+                <td>${ row.id }</td>
                 <td>${ row.y }</td>
                 <td>${ row.m }</td>
                 <td>${ row.name }</td>
@@ -22,6 +27,8 @@
             </tr>
         </tbody>
     </table>
+
+
 
     <!-- Button trigger modal -->
     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -82,6 +89,10 @@
             rows: [],
             editIndex: -1,
             editItem: {},
+            trans: {
+                y: '2022',
+                m: '04'
+            },
             isLoding: true
         },
         delimiters: ['${', '}'],
@@ -96,27 +107,60 @@
             })
         },
         methods: {
+            destory(row) {
+                let url = 'destory';
+                axios
+                    .post(url, {
+                        id: row.id
+                    })
+                    .then((res) => {
+                        console.log(res.data)
+                        this.editIndex = this.rows.indexOf(row);
+                        this.rows.splice(this.editIndex, 1);                        
+                    })
+                
+
+            },
             edit(row) {
-                // this.editItem = {};
                 this.editIndex = this.rows.indexOf(row);
                 this.editItem = Object.assign({}, row);
-                // console.log(this.editIndex)
-                // Object.assign(this.rows[this.editIndex],{'name':'mark'})
                 $('#exampleModal').modal()
-                // console.log(this.rows[this.editIndex])
             },
             save() {
                 let url = 'update';
+
                 let params = this.editItem
-                axios.post(url,params).then((res)=>{
+                axios.post(url, params).then((res) => {
                     console.log(res.data)
                 })
-                
-                
-                Object.assign(this.rows[this.editIndex],this.editItem)
+
+
+                Object.assign(this.rows[this.editIndex], this.editItem)
                 $('#exampleModal').modal('hide')
-               
+
+            },
+            // 依年月轉薪資
+            insert() {
+                let url = 'insert';
+                let params = this.trans;
+
+                axios.post(url, params).then((res) => {
+                    console.log(res.data)
+                    // this.rows.push()
+                })
+
+
+                axios.get('index/data', {}).then((res) => {
+                    this.rows = res.data
+                    // console.log(this.rows)
+                    this.isLoding = false
+                    this.$nextTick(function() {
+                        $('#table_id').DataTable();
+                    });
+                })
+
             }
+
         }
     })
 </script>
