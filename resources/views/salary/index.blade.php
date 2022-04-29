@@ -18,7 +18,7 @@
                 <td>${ row.m }</td>
                 <td>${ row.name }</td>
                 <td>${ row.basic }</td>
-                <td><button type="button" class="btn btn-link" @click="edit(row)">${ row.id }</button></td>
+                <td><button type="button" class="btn btn-link" @click="edit(row)">編輯</button></td>
             </tr>
         </tbody>
     </table>
@@ -39,11 +39,35 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" v-model="editItem.name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">本薪</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" v-model="editItem.basic">
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Sign in</button>
+                            </div>
+                        </div> -->
+                    </form>
+
+
+
+                    <!-- ${editItem} -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" @click="save()">Save changes</button>
                 </div>
             </div>
         </div>
@@ -56,7 +80,8 @@
         el: '#app',
         data: {
             rows: [],
-            editIndex:-1,
+            editIndex: -1,
+            editItem: {},
             isLoding: true
         },
         delimiters: ['${', '}'],
@@ -74,10 +99,20 @@
             edit(row) {
                 // this.editItem = {};
                 this.editIndex = this.rows.indexOf(row);
-                console.log(this.editIndex)
-                Object.assign(this.rows[this.editIndex],{'name':'mark'})
+                this.editItem = Object.assign({}, row);
+                // console.log(this.editIndex)
+                // Object.assign(this.rows[this.editIndex],{'name':'mark'})
+                $('#exampleModal').modal()
+                // console.log(this.rows[this.editIndex])
+            },
+            save() {
+                
+                
+                
+                Object.assign(this.rows[this.editIndex],this.editItem)
+                $('#exampleModal').modal('hide')
                 // $('#exampleModal').modal()
-                console.log(this.rows[this.editIndex])
+                // console.log(this.rows[this.editIndex])
             }
         }
     })
