@@ -1,12 +1,20 @@
 @extends('app')
 @section('content')
 
+<button type="button" id="reload" @click="reLoadData" class="btn btn-primary">
+    reload
+</button>
+
+
+
 
 
 <table id="example" class="display" style="width:100%">
     <thead>
         <tr>
-            <th>姓名</th>
+        <th>年</th>
+        <th>月</th>    
+        <th>姓名</th>
             <th>本薪</th>
         </tr>
     </thead>
@@ -108,6 +116,12 @@
         },
         columns: [
             {
+                data: 'y'
+            },
+            {
+                data: 'm'
+            },
+            {
                 data: 'name'
             },
             {
@@ -116,6 +130,20 @@
         ]
     });
 
+
+    let url = 'trans';
+    let params = {y:2022,m:5};
+
+    $("#reload").click(function() {
+        axios.post(url, params).then((res) => {
+            $('#example').DataTable().ajax.reload();
+        })
+    });
+
+
+    // function reLoadData() {
+    //     alert('abc');
+    // }
 
 
     var app = new Vue({
@@ -137,7 +165,7 @@
                 console.log(this.rows)
                 this.isLoding = false
                 this.$nextTick(function() {
-                    // $('#table_id').DataTable();
+                    $('#table_id').DataTable();
                 });
             })
         },
@@ -181,12 +209,15 @@
 
 
 
-                axios.post(url, params).then((res) => {})
+                axios.post(url, params).then((res) => {
+                    $('#example').DataTable().ajax.reload();
+
+                })
 
 
-                var table = $('#table_id').DataTable({
-                    ajax: "index/data"
-                });
+                // var table = $('#table_id').DataTable({
+                //     ajax: "index/data"
+                // });
 
 
 
