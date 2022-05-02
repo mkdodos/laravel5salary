@@ -6,16 +6,10 @@
 <table id="example" class="display" style="width:100%">
     <thead>
         <tr>
-            <th>Name</th>
-
+            <th>姓名</th>
+            <th>本薪</th>
         </tr>
     </thead>
-    <tfoot>
-        <tr>
-            <th>Name</th>
-
-        </tr>
-    </tfoot>
 </table>
 
 
@@ -107,22 +101,19 @@
 @endsection
 @section('footer')
 <script>
-    // $(document).ready(function() {
-    //     $('#example').DataTable({
-    //         "ajax": "index/data",
-    //         "columns": [{
-    //             "data": "name"
-    //         }]
-    //     });
-    // });
-
-
     $('#example').DataTable({
         ajax: {
             url: 'index/data',
             dataSrc: ''
         },
-        columns: [{data:"name"}]
+        columns: [
+            {
+                data: 'name'
+            },
+            {
+                data: 'basic'
+            }
+        ]
     });
 
 
