@@ -116,9 +116,9 @@
                     .then((res) => {
                         console.log(res.data)
                         this.editIndex = this.rows.indexOf(row);
-                        this.rows.splice(this.editIndex, 1);                        
+                        this.rows.splice(this.editIndex, 1);
                     })
-                
+
 
             },
             edit(row) {
@@ -146,18 +146,18 @@
 
                 axios.post(url, params).then((res) => {
                     console.log(res.data)
-                    // this.rows.push()
+                    axios.get('index/data', {}).then((res) => {
+                        this.rows = res.data
+                        // console.log(this.rows)
+                        this.isLoding = false
+                        this.$nextTick(function() {
+                            $('#table_id').DataTable();
+                        });
+                    })
                 })
 
 
-                axios.get('index/data', {}).then((res) => {
-                    this.rows = res.data
-                    // console.log(this.rows)
-                    this.isLoding = false
-                    this.$nextTick(function() {
-                        $('#table_id').DataTable();
-                    });
-                })
+
 
             }
 

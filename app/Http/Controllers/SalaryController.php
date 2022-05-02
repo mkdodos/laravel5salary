@@ -126,19 +126,30 @@ class SalaryController extends Controller
 
 	}
 	// 員工基本資料
-	private function getEmpBasic()
+	public function getEmpBasic()
 	{
-		$query = " SELECT 姓名,本薪 FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
-		
+		$connectionString = "odbc:salary";
+		$db = new \PDO($connectionString);
+		$query = " SELECT 姓名 as gname,本薪 FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
+		// return $query;
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
-		return $arr;
+
+		// return $arr[0]['gname'];
+		return response($arr[0]['gname'], 200)
+		->header('Content-Type', 'text/html;charset=big5');
+		
 	}
 
 	public function insert()
 	{
-		// return $this->getEmpBasic();
+		// var_dump(implode($this->getEmpBasic()));
+		// foreach($this->getEmpBasic() as $row){
+		// 	echo $row;
+		// }
+		// print_r($this->getEmpBasic());
+		return $this->getEmpBasic();
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
 
