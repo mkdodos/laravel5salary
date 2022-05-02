@@ -23,4 +23,6 @@ Route::post('/salary/destory', 'SalaryController@destory');
 
 Route::post('/salary/trans', 'SalaryController@trans');
 
+Route::get('/salary/pdf', 'SalaryController@pdf');
+
 

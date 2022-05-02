@@ -30,6 +30,13 @@ class SalaryController extends Controller
 
 
 
+	
+	public function pdf()
+	{
+		// return 'ad';
+		return view('salary/pdf');
+	}
+	
 	public function indexData()
 	{
 
