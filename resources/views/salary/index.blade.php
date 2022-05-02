@@ -141,19 +141,18 @@
             },
             // 依年月轉薪資
             insert() {
-                let url = 'insert';
+                let url = 'trans';
                 let params = this.trans;
 
                 axios.post(url, params).then((res) => {
                     console.log(res.data)
-                    axios.get('index/data', {}).then((res) => {
-                        this.rows = res.data
-                        // console.log(this.rows)
-                        this.isLoding = false
-                        this.$nextTick(function() {
-                            $('#table_id').DataTable();
-                        });
-                    })
+                    // axios.get('index/data', {}).then((res) => {
+                    //     this.rows = res.data                        
+                    //     this.isLoding = false
+                    //     this.$nextTick(function() {
+                    //         $('#table_id').DataTable();
+                    //     });
+                    // })
                 })
 
 

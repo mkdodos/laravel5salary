@@ -37,7 +37,8 @@ class SalaryController extends Controller
 		$db = new \PDO($connectionString);
 
 
-		$query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 姓名='馬克'";
+		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 姓名='馬克'";
+		$query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 年=2022 AND 月=4";
 
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
@@ -46,6 +47,10 @@ class SalaryController extends Controller
 
 		$keys = ['id', 'name', 'basic', 'y', 'm'];
 		$json = "";
+
+
+		if(count($arr)==0)
+		return; 
 
 		for ($i = 0; $i < count($arr); $i++) {
 			$j = 0;
@@ -58,7 +63,7 @@ class SalaryController extends Controller
 			$rows[$i] = $newarr;
 		}
 
-
+		
 		// array to json
 		$json = json_encode($rows);
 
@@ -125,38 +130,50 @@ class SalaryController extends Controller
 		// return $query;
 
 	}
+
+	// 轉薪資
+	public function transOLD()
+	{
+		$rows = $this->getEmpBasic();
+		return $rows[0]['gname'];
+	}
 	// 員工基本資料
-	public function getEmpBasic()
+	public function trans()
 	{
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
-		$query = " SELECT 姓名 as gname,本薪 FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
+		$query = " SELECT 姓名 as ename, 本薪 as basic FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
 		// return $query;
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
-
-		// return $arr[0]['gname'];
-		return response($arr[0]['gname'], 200)
-		->header('Content-Type', 'text/html;charset=big5');
+		// $name = urlencode($arr[0]['gname']);
+	
+		foreach($arr as $emp){
+			$name = $emp['ename'];
+			$name = mb_convert_encoding($name,  "UTF-8","BIG5");
+			$this->insert($name,$emp['basic']);
+		}
+		
+	
 		
 	}
 
-	public function insert()
+	public function insert($name,$basic)
 	{
 		// var_dump(implode($this->getEmpBasic()));
 		// foreach($this->getEmpBasic() as $row){
 		// 	echo $row;
 		// }
 		// print_r($this->getEmpBasic());
-		return $this->getEmpBasic();
+		// return $this->getEmpBasic();
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
 
 		$obj = json_decode(file_get_contents('php://input'));
 		
-		$basic = '35400';
-		$name = '馬克';
+		// $basic = '35400';
+		// $name = $name;
 		// return $basic;
 		$y = $obj->y;
 		$m = $obj->m;

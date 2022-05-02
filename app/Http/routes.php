@@ -21,4 +21,6 @@ Route::post('/salary/update', 'SalaryController@update');
 Route::post('/salary/insert', 'SalaryController@insert');
 Route::post('/salary/destory', 'SalaryController@destory');
 
+Route::post('/salary/trans', 'SalaryController@trans');
+
 
