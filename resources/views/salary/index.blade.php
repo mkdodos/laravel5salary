@@ -1,8 +1,32 @@
 @extends('app')
 @section('content')
+
+
+
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Name</th>
+
+        </tr>
+    </tfoot>
+</table>
+
+
 <div id="app" class="container">
     <div v-if="isLoding">載入中...</div>
     <button type="button" class="btn btn-default" @click="insert()">轉薪資</button>
+
+
+
+
+
     <table v-if="!isLoding" class="display" id="table_id">
         <thead>
             <tr>
@@ -83,6 +107,26 @@
 @endsection
 @section('footer')
 <script>
+    // $(document).ready(function() {
+    //     $('#example').DataTable({
+    //         "ajax": "index/data",
+    //         "columns": [{
+    //             "data": "name"
+    //         }]
+    //     });
+    // });
+
+
+    $('#example').DataTable({
+        ajax: {
+            url: 'index/data',
+            dataSrc: ''
+        },
+        columns: [{data:"name"}]
+    });
+
+
+
     var app = new Vue({
         el: '#app',
         data: {
@@ -102,7 +146,7 @@
                 console.log(this.rows)
                 this.isLoding = false
                 this.$nextTick(function() {
-                    $('#table_id').DataTable();
+                    // $('#table_id').DataTable();
                 });
             })
         },
@@ -144,16 +188,32 @@
                 let url = 'trans';
                 let params = this.trans;
 
-                axios.post(url, params).then((res) => {
-                    console.log(res.data)
-                    // axios.get('index/data', {}).then((res) => {
-                    //     this.rows = res.data                        
-                    //     this.isLoding = false
-                    //     this.$nextTick(function() {
-                    //         $('#table_id').DataTable();
-                    //     });
-                    // })
-                })
+
+
+                axios.post(url, params).then((res) => {})
+
+
+                var table = $('#table_id').DataTable({
+                    ajax: "index/data"
+                });
+
+
+
+                // axios.post(url, params).then((res) => {
+
+                //     axios.get('index/data', {}).then((res) => {
+
+                //         this.isLoding = false
+                //         console.log(res.data)
+
+                //         $('#table_id').dataTable().fnClearTable();
+                //         this.rows = res.data
+
+                //         this.$nextTick(function() {
+                //             $('#table_id').DataTable()
+                //         })
+                //     })
+                // });
 
 
 
