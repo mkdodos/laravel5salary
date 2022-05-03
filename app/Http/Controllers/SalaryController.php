@@ -30,13 +30,13 @@ class SalaryController extends Controller
 
 
 
-	
+
 	public function pdf()
 	{
 		// return 'ad';
 		return view('salary/pdf');
 	}
-	
+
 	public function indexData()
 	{
 
@@ -44,9 +44,23 @@ class SalaryController extends Controller
 		$db = new \PDO($connectionString);
 
 
+		// 依前端傳來參數組合查詢條件
+		$m = isset($_GET["m"]) ? $_GET["m"] : "";
+		$where = "";
+		if ($m)
+			$where = " 月 = " . $m;
+
+
+		if ($where != "")
+			$where = " where " . $where;
+
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 姓名='馬克'";
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 年=2022 AND 月=4";
-		$query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 年=2022";
+		$query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 ";
+
+		if ($where) {
+			$query .= $where;
+		}
 
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
@@ -57,8 +71,8 @@ class SalaryController extends Controller
 		$json = "";
 
 
-		if(count($arr)==0)
-		return; 
+		if (count($arr) == 0)
+			return;
 
 		for ($i = 0; $i < count($arr); $i++) {
 			$j = 0;
@@ -67,11 +81,11 @@ class SalaryController extends Controller
 				$newarr[urlencode($keys[$j])] = urlencode(trim($value));
 				$j++;
 			}
-			
+
 			$rows[$i] = $newarr;
 		}
 
-		
+
 		// array to json
 		$json = json_encode($rows);
 
@@ -90,8 +104,8 @@ class SalaryController extends Controller
 
 		$obj = json_decode(file_get_contents('php://input'));
 		$id = $obj->id;
-		
-		
+
+
 
 		$sql = " DELETE FROM 薪資紀錄表 WHERE ID=$id";
 
@@ -156,18 +170,15 @@ class SalaryController extends Controller
 		$rs = $db->query($query);
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
 		// $name = urlencode($arr[0]['gname']);
-	
-		foreach($arr as $emp){
+
+		foreach ($arr as $emp) {
 			$name = $emp['ename'];
-			$name = mb_convert_encoding($name,  "UTF-8","BIG5");
-			$this->insert($name,$emp['basic']);
+			$name = mb_convert_encoding($name,  "UTF-8", "BIG5");
+			$this->insert($name, $emp['basic']);
 		}
-		
-	
-		
 	}
 
-	public function insert($name,$basic)
+	public function insert($name, $basic)
 	{
 		// var_dump(implode($this->getEmpBasic()));
 		// foreach($this->getEmpBasic() as $row){
@@ -179,13 +190,13 @@ class SalaryController extends Controller
 		$db = new \PDO($connectionString);
 
 		$obj = json_decode(file_get_contents('php://input'));
-		
+
 		// $basic = '35400';
 		// $name = $name;
 		// return $basic;
 		$y = $obj->y;
 		$m = $obj->m;
-		
+
 
 		$sql = " INSERT INTO 薪資紀錄表 (年,月,姓名,本薪) VALUES ($y,$m,'$name',$basic)";
 		// $sql = " INSERT INTO 薪資紀錄表 ";
