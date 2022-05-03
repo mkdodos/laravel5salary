@@ -71,14 +71,14 @@
 
 	@yield('content')
 
-	<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> -->
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
 	<!-- Scripts -->
 	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
-	<!-- <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
+	<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script> -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>

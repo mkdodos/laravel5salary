@@ -2,27 +2,20 @@
 
 @section('content')
 <div class="container" id="app">
-    <v-data-table :headers="headers" :items="desserts" :items-per-page="5" class="elevation-1"></v-data-table>
-    <!-- <v-simple-table>
-        <template v-slot:default>
-            <thead>
-                <tr>
-                    <th class="text-left">
-                        Name
-                    </th>
-                    <th class="text-left">
-                        Calories
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in desserts" :key="item.name">
-                    <td>${ item.name }</td>
-                    <td>${ item.calories }</td>
-                </tr>
-            </tbody>
-        </template>
-    </v-simple-table> -->
+    <v-app>
+      
+            <v-text-field label="年" v-model="transData.y"></v-text-field>
+            <v-text-field label="月" v-model="transData.m" type="number"></v-text-field>
+            
+       
+        <!-- <input type="text" v-model="transData.y">
+        <input type="text" v-model="transData.m"> -->
+        <v-btn @click="trans">轉薪資</v-btn>
+
+        <v-data-table :headers="headers" :items="rows" :items-per-page="10" class="elevation-1"></v-data-table>
+
+    </v-app>
+
 </div>
 @endsection
 
@@ -32,60 +25,50 @@
         el: '#app',
         vuetify: new Vuetify(),
         delimiters: ['${', '}'],
+        created() {
+
+            axios.get('index/data', {}).then((res) => {
+                this.rows = res.data
+            })
+        },
+        methods: {
+            trans() {
+                let url = 'trans';
+                let params = this.transData;
+                axios.post(url, params).then((res) => {
+                    axios.get('index/data', {}).then((res) => {
+                        this.rows = res.data
+                    })
+                })
+            }
+        },
         data() {
             return {
+                transData: {
+                    y: '2022',
+                    m: '6'
+                },
+                rows: [],
                 headers: [{
-                        text: '甜點',
+                        text: '年',
+                        value: 'y'
+                    },
+                    {
+                        text: '月',
+                        value: 'm'
+                    },
+                    {
+                        text: '姓名',
                         align: 'start',
                         sortable: false,
                         value: 'name',
                     },
                     {
-                        text: '卡路里',
-                        value: 'calories'
-                    },                    
-                ],
-                desserts: [{
-                        name: 'Frozen Yogurt',
-                        calories: 159,
-                    },
-                    {
-                        name: 'Ice cream sandwich',
-                        calories: 237,
-                    },
-                    {
-                        name: 'Eclair',
-                        calories: 262,
-                    },
-                    {
-                        name: 'Cupcake',
-                        calories: 305,
-                    },
-                    {
-                        name: 'Gingerbread',
-                        calories: 356,
-                    },
-                    {
-                        name: 'Jelly bean',
-                        calories: 375,
-                    },
-                    {
-                        name: 'Lollipop',
-                        calories: 392,
-                    },
-                    {
-                        name: 'Honeycomb',
-                        calories: 408,
-                    },
-                    {
-                        name: 'Donut',
-                        calories: 452,
-                    },
-                    {
-                        name: 'KitKat',
-                        calories: 518,
+                        text: '本薪',
+                        value: 'basic'
                     },
                 ],
+
             }
         },
     })
