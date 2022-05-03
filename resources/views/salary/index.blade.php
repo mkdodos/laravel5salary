@@ -1,18 +1,35 @@
 @extends('app')
 
 @section('content')
-<div class="container" id="app">
+<div id="app">
     <v-app>
-      
-            <v-text-field label="年" v-model="transData.y"></v-text-field>
-            <v-text-field label="月" v-model="transData.m" type="number"></v-text-field>
-            
-       
-        <!-- <input type="text" v-model="transData.y">
-        <input type="text" v-model="transData.m"> -->
-        <v-btn @click="trans">轉薪資</v-btn>
 
-        <v-data-table :headers="headers" :items="rows" :items-per-page="10" class="elevation-1"></v-data-table>
+    <v-container>
+
+        <v-row class="mb-6">
+            <v-col class="text-right">
+                <v-text-field label="年" v-model="transData.y"></v-text-field>
+            </v-col>
+            <v-col class="text-right">
+                <v-text-field label="月" v-model="transData.m" type="number"></v-text-field>
+            </v-col>
+            <v-col>
+                <v-btn @click="trans">轉薪資</v-btn>
+            </v-col>
+        </v-row>
+
+
+
+<v-row>
+    <v-col>
+    <v-data-table :headers="headers" :items="rows" :items-per-page="10" class="elevation-1"></v-data-table>
+
+    </v-col>
+
+</v-row>
+
+
+</v-container>
 
     </v-app>
 
