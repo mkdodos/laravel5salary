@@ -1,248 +1,93 @@
 @extends('app')
+
 @section('content')
-
-<button type="button" id="reload" @click="reLoadData" class="btn btn-primary">
-    reload
-</button>
-
-
-
-
-
-<table id="example" class="display" style="width:100%">
-    <thead>
-        <tr>
-        <th>年</th>
-        <th>月</th>    
-        <th>姓名</th>
-            <th>本薪</th>
-        </tr>
-    </thead>
-</table>
-
-
-<div id="app" class="container">
-    <div v-if="isLoding">載入中...</div>
-    <button type="button" class="btn btn-default" @click="insert()">轉薪資</button>
-
-
-
-
-
-    <table v-if="!isLoding" class="display" id="table_id">
-        <thead>
-            <tr>
-                <th></th>
-                <th></th>
-                <th>年</th>
-                <th>月</th>
-                <th>姓名</th>
-                <th>本薪</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="row in rows" :key="row.id">
-                <td><button type="button" class="btn btn-link" @click="destory(row)">刪除</button></td>
-                <td>${ row.id }</td>
-                <td>${ row.y }</td>
-                <td>${ row.m }</td>
-                <td>${ row.name }</td>
-                <td>${ row.basic }</td>
-                <td><button type="button" class="btn btn-link" @click="edit(row)">編輯</button></td>
-            </tr>
-        </tbody>
-    </table>
-
-
-
-    <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Launch demo modal
-    </button> -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">姓名</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" v-model="editItem.name">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label">本薪</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control" v-model="editItem.basic">
-                            </div>
-                        </div>
-
-                        <!-- <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">Sign in</button>
-                            </div>
-                        </div> -->
-                    </form>
-
-
-
-                    <!-- ${editItem} -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click="save()">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container" id="app">
+    <v-data-table :headers="headers" :items="desserts" :items-per-page="5" class="elevation-1"></v-data-table>
+    <!-- <v-simple-table>
+        <template v-slot:default>
+            <thead>
+                <tr>
+                    <th class="text-left">
+                        Name
+                    </th>
+                    <th class="text-left">
+                        Calories
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in desserts" :key="item.name">
+                    <td>${ item.name }</td>
+                    <td>${ item.calories }</td>
+                </tr>
+            </tbody>
+        </template>
+    </v-simple-table> -->
 </div>
 @endsection
+
 @section('footer')
 <script>
-    $('#example').DataTable({
-        ajax: {
-            url: 'index/data',
-            dataSrc: ''
-        },
-        columns: [
-            {
-                data: 'y'
-            },
-            {
-                data: 'm'
-            },
-            {
-                data: 'name'
-            },
-            {
-                data: 'basic'
-            }
-        ]
-    });
-
-
-    let url = 'trans';
-    let params = {y:2022,m:5};
-
-    $("#reload").click(function() {
-        axios.post(url, params).then((res) => {
-            $('#example').DataTable().ajax.reload();
-        })
-    });
-
-
-    // function reLoadData() {
-    //     alert('abc');
-    // }
-
-
-    var app = new Vue({
+    new Vue({
         el: '#app',
-        data: {
-            rows: [],
-            editIndex: -1,
-            editItem: {},
-            trans: {
-                y: '2022',
-                m: '04'
-            },
-            isLoding: true
-        },
+        vuetify: new Vuetify(),
         delimiters: ['${', '}'],
-        created() {
-            axios.get('index/data', {}).then((res) => {
-                this.rows = res.data
-                console.log(this.rows)
-                this.isLoding = false
-                this.$nextTick(function() {
-                    $('#table_id').DataTable();
-                });
-            })
-        },
-        methods: {
-            destory(row) {
-                let url = 'destory';
-                axios
-                    .post(url, {
-                        id: row.id
-                    })
-                    .then((res) => {
-                        console.log(res.data)
-                        this.editIndex = this.rows.indexOf(row);
-                        this.rows.splice(this.editIndex, 1);
-                    })
-
-
-            },
-            edit(row) {
-                this.editIndex = this.rows.indexOf(row);
-                this.editItem = Object.assign({}, row);
-                $('#exampleModal').modal()
-            },
-            save() {
-                let url = 'update';
-
-                let params = this.editItem
-                axios.post(url, params).then((res) => {
-                    console.log(res.data)
-                })
-
-
-                Object.assign(this.rows[this.editIndex], this.editItem)
-                $('#exampleModal').modal('hide')
-
-            },
-            // 依年月轉薪資
-            insert() {
-                let url = 'trans';
-                let params = this.trans;
-
-
-
-                axios.post(url, params).then((res) => {
-                    $('#example').DataTable().ajax.reload();
-
-                })
-
-
-                // var table = $('#table_id').DataTable({
-                //     ajax: "index/data"
-                // });
-
-
-
-                // axios.post(url, params).then((res) => {
-
-                //     axios.get('index/data', {}).then((res) => {
-
-                //         this.isLoding = false
-                //         console.log(res.data)
-
-                //         $('#table_id').dataTable().fnClearTable();
-                //         this.rows = res.data
-
-                //         this.$nextTick(function() {
-                //             $('#table_id').DataTable()
-                //         })
-                //     })
-                // });
-
-
-
-
+        data() {
+            return {
+                headers: [{
+                        text: '甜點',
+                        align: 'start',
+                        sortable: false,
+                        value: 'name',
+                    },
+                    {
+                        text: '卡路里',
+                        value: 'calories'
+                    },                    
+                ],
+                desserts: [{
+                        name: 'Frozen Yogurt',
+                        calories: 159,
+                    },
+                    {
+                        name: 'Ice cream sandwich',
+                        calories: 237,
+                    },
+                    {
+                        name: 'Eclair',
+                        calories: 262,
+                    },
+                    {
+                        name: 'Cupcake',
+                        calories: 305,
+                    },
+                    {
+                        name: 'Gingerbread',
+                        calories: 356,
+                    },
+                    {
+                        name: 'Jelly bean',
+                        calories: 375,
+                    },
+                    {
+                        name: 'Lollipop',
+                        calories: 392,
+                    },
+                    {
+                        name: 'Honeycomb',
+                        calories: 408,
+                    },
+                    {
+                        name: 'Donut',
+                        calories: 452,
+                    },
+                    {
+                        name: 'KitKat',
+                        calories: 518,
+                    },
+                ],
             }
-
-        }
+        },
     })
 </script>
 @endsection
