@@ -45,11 +45,18 @@ class SalaryController extends Controller
 
 
 		// 依前端傳來參數組合查詢條件
+		$y = isset($_GET["y"]) ? $_GET["y"] : "";
 		$m = isset($_GET["m"]) ? $_GET["m"] : "";
 		$where = "";
-		if ($m)
-			$where = " 月 = " . $m;
+		if ($y)
+			$where = " 年 = " . $y;
 
+		if($m){
+			if($where!=""){
+				$where.=" AND ";
+			}
+			$where.="月 = $m";
+		}		
 
 		if ($where != "")
 			$where = " where " . $where;
