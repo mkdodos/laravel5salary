@@ -25,15 +25,8 @@ class SalaryController extends Controller
 		return view('salary/index');
 	}
 
-
-
-
-
-
-
 	public function pdf()
 	{
-		// return 'ad';
 		return view('salary/pdf');
 	}
 
@@ -124,24 +117,16 @@ class SalaryController extends Controller
 		$obj = json_decode(file_get_contents('php://input'));
 		$id = $obj->id;
 
-
-
-		$sql = " DELETE FROM 薪資紀錄表 WHERE ID=$id";
-
-		// return $sql;
+		$sql = " DELETE FROM 薪資紀錄表 WHERE ID=$id";		
 
 		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
-		// echo $sql;
-		// return;
-
+		
 		try {
 			$statement = $db->prepare($sql);
 			$statement->execute();
 		} catch (PDOException $err) {
 			print_r($err->getMessage());
-		}
-
-		// return $query;
+		}	
 
 	}
 
@@ -156,39 +141,28 @@ class SalaryController extends Controller
 
 		$sql = " UPDATE 薪資紀錄表 SET 本薪='$basic' WHERE ID=$id";
 
-
 		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
-		// echo $sql;
-		// return;
-
+		
 		try {
 			$statement = $db->prepare($sql);
 			$statement->execute();
 		} catch (PDOException $err) {
 			print_r($err->getMessage());
-		}
-
-		// return $query;
+		}		
 
 	}
 
+	
 	// 轉薪資
-	public function transOLD()
-	{
-		$rows = $this->getEmpBasic();
-		return $rows[0]['gname'];
-	}
-	// 員工基本資料
 	public function trans()
 	{
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
 		$query = " SELECT 姓名 as ename, 本薪 as basic FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
-		// return $query;
+		
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
-		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
-		// $name = urlencode($arr[0]['gname']);
+		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);		
 
 		foreach ($arr as $emp) {
 			$name = $emp['ename'];
@@ -198,41 +172,25 @@ class SalaryController extends Controller
 	}
 
 	public function insert($name, $basic)
-	{
-		// var_dump(implode($this->getEmpBasic()));
-		// foreach($this->getEmpBasic() as $row){
-		// 	echo $row;
-		// }
-		// print_r($this->getEmpBasic());
-		// return $this->getEmpBasic();
+	{		
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
 
 		$obj = json_decode(file_get_contents('php://input'));
-
-		// $basic = '35400';
-		// $name = $name;
-		// return $basic;
+		
 		$y = $obj->y;
 		$m = $obj->m;
 
+		$sql = " INSERT INTO 薪資紀錄表 (年,月,姓名,本薪) VALUES ($y,$m,'$name',$basic)";		
 
-		$sql = " INSERT INTO 薪資紀錄表 (年,月,姓名,本薪) VALUES ($y,$m,'$name',$basic)";
-		// $sql = " INSERT INTO 薪資紀錄表 ";
-		// return $sql;
-
-		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
-		// echo $sql;
-		// return;
+		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");		
 
 		try {
 			$statement = $db->prepare($sql);
 			$statement->execute();
 		} catch (PDOException $err) {
 			print_r($err->getMessage());
-		}
-
-		// return $query;
+		}		
 
 	}
 }

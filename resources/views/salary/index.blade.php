@@ -19,6 +19,12 @@
                     <v-btn class="success" @click="filterRow">查詢</v-btn>
                 </v-col>
                 <v-col>
+                    <v-btn outlined color="indigo">
+                        
+                        <a href="{{ url('/salary/pdf') }}">PDF</a>
+                    </v-btn>
+                </v-col>
+                <v-col>
                     <v-btn dark @click="trans">轉薪資</v-btn>
                 </v-col>
             </v-row>
@@ -45,9 +51,6 @@
                         <v-row>
                             <v-col>
                                 <v-text-field label="本薪" v-model="editItem.basic"></v-text-field>
-                            </v-col>
-                            <v-col>
-                                <v-text-field label="支出"></v-text-field>
                             </v-col>
                         </v-row>
                         <v-btn class="primary" @click="save">儲存</v-btn>
@@ -77,7 +80,6 @@
         methods: {
             save() {
                 this.dialog = false;
-                // console.log(this.editItem)
                 let url = 'update';
                 let params = this.editItem
                 axios.post(url, params).then((res) => {
@@ -110,11 +112,9 @@
             filterRow() {
                 let url = 'index/data';
                 let row = {};
-                // console.log(this.searchEmp.name)
                 // 有輸入值才傳到後端處理               
                 if (this.transData.y) row.y = this.transData.y;
                 if (this.transData.m) row.m = this.transData.m;
-                // console.log(this.searchEmp)
                 if (this.searchEmp !== null && this.searchEmp !== '') {
                     row.name = this.searchEmp.name
                 };
