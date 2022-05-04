@@ -47,20 +47,32 @@ class SalaryController extends Controller
 		// 依前端傳來參數組合查詢條件
 		$y = isset($_GET["y"]) ? $_GET["y"] : "";
 		$m = isset($_GET["m"]) ? $_GET["m"] : "";
+		$name = isset($_GET["name"]) ? urlencode($_GET["name"]) : "";
+		$name = urldecode($name);
+
 		$where = "";
 		if ($y)
-			$where = " 年 = " . $y;
+			$where = " 年 = $y ";
 
-		if($m){
-			if($where!=""){
-				$where.=" AND ";
+		if ($m) {
+			if ($where != "") {
+				$where .= " AND ";
 			}
-			$where.="月 = $m";
-		}		
+			$where .= "月 = $m ";
+		}
+
+		if ($name) {
+			if ($where != "") {
+				$where .= " AND ";
+			}
+			$where .= "姓名 ='$name' ";
+		}
 
 		if ($where != "")
 			$where = " where " . $where;
 
+
+		// return $where;
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 姓名='馬克'";
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 年=2022 AND 月=4";
 		$query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 ";

@@ -1,12 +1,14 @@
 @extends('app')
-
 @section('content')
 <div id="app">
     <v-app>
-
         <v-container>
-
+            <!-- 查詢項 -->
             <v-row class="mb-6">
+                <v-col class="text-right">
+                    <v-autocomplete label="姓名" v-model="searchEmp" :items="empData" return-object item-text="name" item-value="name">
+                    </v-autocomplete>
+                </v-col>
                 <v-col class="text-right">
                     <v-text-field label="年" v-model="transData.y" type="number"></v-text-field>
                 </v-col>
@@ -19,11 +21,9 @@
                 <v-col>
                     <v-btn dark @click="trans">轉薪資</v-btn>
                 </v-col>
-
             </v-row>
 
-
-
+            <!-- 資料表格 -->
             <v-row>
                 <v-col>
                     <v-data-table :headers="headers" :items="rows" :items-per-page="10" class="elevation-1">
@@ -34,20 +34,14 @@
                             <v-btn @click="editRow(item)">編輯</v-btn>
                         </template>
                     </v-data-table>
-
                 </v-col>
-
             </v-row>
-
-           
-
 
             <!-- 編輯項 -->
             <v-dialog v-model="dialog" width="500">
                 <v-card>
                     <v-card-title class="text-h5">編輯</v-card-title>
                     <v-card-text>
-                        <!-- <v-text-field label="項目"></v-text-field> -->
                         <v-row>
                             <v-col>
                                 <v-text-field label="本薪" v-model="editItem.basic"></v-text-field>
@@ -58,17 +52,10 @@
                         </v-row>
                         <v-btn class="primary" @click="save">儲存</v-btn>
                     </v-card-text>
-
                 </v-card>
             </v-dialog>
 
-
-
-
-
-
         </v-container>
-
     </v-app>
 
 </div>
@@ -81,10 +68,11 @@
         vuetify: new Vuetify(),
         delimiters: ['${', '}'],
         created() {
+            axios.get('../emp/basic/data').then((res) => {
+                this.empData = res.data;
+                console.log(res.data)
+            })
             this.filterRow()
-            // axios.get('index/data', {}).then((res) => {
-            //     this.rows = res.data
-            // })
         },
         methods: {
             save() {
@@ -93,11 +81,8 @@
                 let url = 'update';
                 let params = this.editItem
                 axios.post(url, params).then((res) => {
-                    console.log(res.data)
+                    Object.assign(this.rows[this.editIndex], this.editItem)
                 })
-
-
-                Object.assign(this.rows[this.editIndex], this.editItem)
             },
             editRow(item) {
                 this.editIndex = this.rows.indexOf(item);
@@ -120,21 +105,24 @@
                 let params = this.transData;
                 axios.post(url, params).then((res) => {
                     this.filterRow()
-                    // axios.get('index/data', {}).then((res) => {
-                    //     this.rows = res.data
-                    // })
                 })
             },
             filterRow() {
                 let url = 'index/data';
                 let row = {};
+                // console.log(this.searchEmp.name)
                 // 有輸入值才傳到後端處理               
                 if (this.transData.y) row.y = this.transData.y;
                 if (this.transData.m) row.m = this.transData.m;
+                // console.log(this.searchEmp)
+                if (this.searchEmp !== null && this.searchEmp !== '') {
+                    row.name = this.searchEmp.name
+                };
 
                 axios.get(url, {
                     params: row
                 }).then(res => {
+                    console.log(res)
                     //避免沒資料時出錯,沒資料時給空陣列
                     if (res.data) this.rows = res.data;
                     else this.rows = [];
@@ -143,10 +131,12 @@
         },
         data() {
             return {
+                empData: [],
+                searchEmp: '',
                 editItem: {},
                 dialog: false,
                 transData: {
-                    y: '2022',
+                    y: new Date().getFullYear(),
                     m: new Date().getMonth()
                 },
                 rows: [],
