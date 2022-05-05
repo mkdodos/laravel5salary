@@ -30,6 +30,11 @@ class SalaryController extends Controller
 		return view('salary/pdf');
 	}
 
+	public function chart()
+	{
+		return view('salary/chart');
+	}
+
 	public function indexData()
 	{
 

@@ -25,6 +25,8 @@ Route::post('/salary/destory', 'SalaryController@destory');
 
 Route::post('/salary/trans', 'SalaryController@trans');
 
+// 報表和圖表
 Route::get('/salary/pdf', 'SalaryController@pdf');
+Route::get('/salary/chart', 'SalaryController@chart');
 
 
