@@ -121,9 +121,11 @@ class SalaryController extends Controller
 
 		$obj = json_decode(file_get_contents('php://input'));
 		$id = $obj->id;
+		
+		$sql = " DELETE FROM 薪資紀錄表 WHERE ID=$id";	
+		
 
-		$sql = " DELETE FROM 薪資紀錄表 WHERE ID=$id";		
-
+		
 		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
 		
 		try {
@@ -134,6 +136,33 @@ class SalaryController extends Controller
 		}	
 
 	}
+
+
+	public function destoryMonth()
+	{
+		$connectionString = "odbc:salary";
+		$db = new \PDO($connectionString);
+
+		$obj = json_decode(file_get_contents('php://input'));
+		
+		$y= $obj->y;
+		$m= $obj->m;
+		
+		$sql = " DELETE FROM 薪資紀錄表 WHERE 年=$y AND 月=$m";	
+
+		
+		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
+		
+		try {
+			$statement = $db->prepare($sql);
+			$statement->execute();
+		} catch (PDOException $err) {
+			print_r($err->getMessage());
+		}	
+
+	}
+
+	
 
 	public function update()
 	{

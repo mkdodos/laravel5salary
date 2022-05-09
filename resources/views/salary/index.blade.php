@@ -25,6 +25,11 @@
                     </v-btn>
                 </v-col>
                 <v-col>
+                    <v-btn outlined color="error" @click="deleteMonth">
+                        刪除整月                       
+                    </v-btn>
+                </v-col>
+                <v-col>
                     <v-btn dark @click="trans">轉薪資</v-btn>
                 </v-col>
             </v-row>
@@ -109,6 +114,17 @@
                         this.editedIndex = this.rows.indexOf(item);
                         this.rows.splice(this.editedIndex, 1);
                         console.log(response.data);
+                    })
+            },
+            deleteMonth() {
+                if(confirm('確定刪除整月資料?'))
+                axios
+                    .post("destoryMonth", {
+                        y: this.transData.y,
+                        m: this.transData.m
+                    })
+                    .then(() => {  
+                        this.filterRow()                
                     })
             },
             trans() {
