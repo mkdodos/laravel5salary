@@ -73,7 +73,7 @@ class SalaryController extends Controller
 		// return $where;
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 姓名='馬克'";
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 年=2022 AND 月=4";
-		$query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 ";
+		$query = " SELECT ID,姓名,年,月,本薪,職務加給,技術加給 FROM 薪資紀錄表 ";
 
 		if ($where) {
 			$query .= $where;
@@ -84,7 +84,7 @@ class SalaryController extends Controller
 
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
 
-		$keys = ['id', 'name', 'basic', 'y', 'm'];
+		$keys = ['id', 'name', 'y', 'm','basic', 'job','tech' ];
 		$json = "";
 
 
@@ -143,8 +143,10 @@ class SalaryController extends Controller
 		$obj = json_decode(file_get_contents('php://input'));
 		$id = $obj->id;
 		$basic = $obj->basic;
+		$job = $obj->job;
+		$tech = $obj->tech;
 
-		$sql = " UPDATE 薪資紀錄表 SET 本薪='$basic' WHERE ID=$id";
+		$sql = " UPDATE 薪資紀錄表 SET 本薪='$basic',職務加給='$job',技術加給='$tech' WHERE ID=$id";
 
 		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
 		

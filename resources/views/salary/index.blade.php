@@ -52,6 +52,12 @@
                             <v-col>
                                 <v-text-field label="本薪" v-model="editItem.basic"></v-text-field>
                             </v-col>
+                            <v-col>
+                                <v-text-field label="職務加給" v-model="editItem.job"></v-text-field>
+                            </v-col>
+                            <v-col>
+                                <v-text-field label="技術加給" v-model="editItem.tech"></v-text-field>
+                            </v-col>
                         </v-row>
                         <v-btn class="primary" @click="save">儲存</v-btn>
                     </v-card-text>
@@ -161,6 +167,14 @@
                     {
                         text: '本薪',
                         value: 'basic'
+                    },
+                    {
+                        text: '職務加給',
+                        value: 'job'
+                    },
+                    {
+                        text: '技術加給',
+                        value: 'tech'
                     },
                     {
                         text: '',
