@@ -19,9 +19,9 @@
                     <v-btn class="success" @click="filterRow">查詢</v-btn>
                 </v-col>
                 <v-col>
-                    <v-btn outlined color="indigo">
-                        
-                        <a href="{{ url('/salary/pdf') }}">PDF</a>
+                    <v-btn outlined color="indigo" @click="pdf">
+                        PDF
+                        <!-- <a href="{{ url('/salary/pdf') }}">PDF</a> -->
                     </v-btn>
                 </v-col>
                 <v-col>
@@ -71,6 +71,9 @@
 @endsection
 
 @section('footer')
+<script src="{{asset('js/jspdf.min.js')}}"></script>
+<script src="{{asset('js/msjhbd-normal.js')}}"></script>
+<script src="{{asset('js/jspdf.plugin.autotable.js')}}"></script>
 <script>
     new Vue({
         el: '#app',
@@ -134,6 +137,62 @@
                     else this.rows = [];
                 });
             },
+            pdf() {
+                var doc = new jsPDF('p', 'mm');
+                // 字型       
+                doc.addFileToVFS("name-for-addFont-use", font);
+                doc.addFont('name-for-addFont-use', 'name-for-setFont-use', 'normal');
+                doc.setFont('name-for-setFont-use');
+                doc.setFontSize(20);
+
+                doc.text(this.transData.y+'/'+this.transData.m+' 薪資報表', 30, 20);
+
+                let rows = this.rows
+                // {id: '7869', name: '馬志賢', basic: '35400'}
+                // dataKey 對應 json 資料的 key
+                var columns = [{
+                        title: "ID",
+                        dataKey: "id"
+                    },
+                    {
+                        title: "姓名",
+                        dataKey: "name"
+                    },
+                    {
+                        title: "本薪",
+                        dataKey: "basic"
+                    },
+                    {
+                        title: "",
+                        dataKey: "job"
+                    },
+                    {
+                        title: "",
+                        dataKey: "tech"
+                    }
+                ];
+                doc.autoTable(columns, rows, {
+                    styles: {
+                        // 標題列有中文的話會亂碼,設定白色讓標題列看不見
+                        fillColor: [255, 255, 255],
+                        font: "name-for-setFont-use"
+                    },
+                    columnStyles: {
+                        id: {
+                            fillColor: 255
+                        }
+                    },
+                    startY: 30,
+                    margin: {
+                        // top: 30
+                    },
+                    addPageContent: function(data) {
+                        // doc.text("薪資報表", 20, 20);
+                    }
+                });
+
+                doc.save("a4.pdf");
+            }
         },
         data() {
             return {

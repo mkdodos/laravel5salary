@@ -25,7 +25,7 @@ class SalaryController extends Controller
 		return view('salary/index');
 	}
 
-	public function pdf()
+	public function pdf($y)
 	{
 		return view('salary/pdf');
 	}
