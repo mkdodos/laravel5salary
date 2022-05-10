@@ -73,7 +73,7 @@ class SalaryController extends Controller
 		// return $where;
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 姓名='馬克'";
 		// $query = " SELECT ID,姓名,本薪,年,月 FROM 薪資紀錄表 WHERE 年=2022 AND 月=4";
-		$query = " SELECT ID,姓名,年,月,本薪,職務加給,技術加給 FROM 薪資紀錄表 ";
+		$query = " SELECT ID,姓名,年,月,本薪,職務加給,技術加給,(本薪+職務加給+技術加給) as total FROM 薪資紀錄表 ";
 
 		if ($where) {
 			$query .= $where;
@@ -84,7 +84,7 @@ class SalaryController extends Controller
 
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
 
-		$keys = ['id', 'name', 'y', 'm','basic', 'job','tech' ];
+		$keys = ['id', 'name', 'y', 'm','basic', 'job','tech','total' ];
 		$json = "";
 
 
@@ -194,7 +194,7 @@ class SalaryController extends Controller
 	{
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
-		$query = " SELECT 姓名 as ename, 本薪 as basic FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
+		$query = " SELECT 姓名 as ename, 本薪 as basic,職務加給 as job, 技術加給 as tech FROM 員工基本資料 WHERE 離職日 IS NULL AND 姓名 <> 'LE'";
 		
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
@@ -203,11 +203,11 @@ class SalaryController extends Controller
 		foreach ($arr as $emp) {
 			$name = $emp['ename'];
 			$name = mb_convert_encoding($name,  "UTF-8", "BIG5");
-			$this->insert($name, $emp['basic']);
+			$this->insert($name, $emp['basic'],$emp['job'],$emp['tech']);
 		}
 	}
 
-	public function insert($name, $basic)
+	public function insert($name, $basic,$job,$tech)
 	{		
 		$connectionString = "odbc:salary";
 		$db = new \PDO($connectionString);
@@ -217,7 +217,8 @@ class SalaryController extends Controller
 		$y = $obj->y;
 		$m = $obj->m;
 
-		$sql = " INSERT INTO 薪資紀錄表 (年,月,姓名,本薪) VALUES ($y,$m,'$name',$basic)";		
+		$sql = " INSERT INTO 薪資紀錄表 (年,月,姓名,本薪,職務加給,技術加給) 
+		VALUES ($y,$m,'$name',$basic,$job,$tech)";		
 
 		$sql = mb_convert_encoding($sql, "BIG5", "UTF-8");		
 

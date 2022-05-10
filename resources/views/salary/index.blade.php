@@ -55,13 +55,13 @@
                     <v-card-text>
                         <v-row>
                             <v-col>
-                                <v-text-field label="本薪" v-model="editItem.basic"></v-text-field>
+                                <v-text-field type="number" label="本薪" v-model="editItem.basic"></v-text-field>
                             </v-col>
                             <v-col>
-                                <v-text-field label="職務加給" v-model="editItem.job"></v-text-field>
+                                <v-text-field type="number" label="職務加給" v-model="editItem.job"></v-text-field>
                             </v-col>
                             <v-col>
-                                <v-text-field label="技術加給" v-model="editItem.tech"></v-text-field>
+                                <v-text-field type="number" label="技術加給" v-model="editItem.tech"></v-text-field>
                             </v-col>
                         </v-row>
                         <v-btn class="primary" @click="save">儲存</v-btn>
@@ -91,11 +91,19 @@
             })
             this.filterRow()
         },
+        computed: {
+            getTotal() {
+                return  this.editItem.basic*1+this.editItem.job*1+this.editItem.tech*1
+            }
+        },
         methods: {
             save() {
                 this.dialog = false;
                 let url = 'update';
                 let params = this.editItem
+                // 單筆金額
+                this.editItem.total = this.getTotal
+
                 axios.post(url, params).then((res) => {
                     Object.assign(this.rows[this.editIndex], this.editItem)
                 })
@@ -185,6 +193,10 @@
                     {
                         title: "",
                         dataKey: "tech"
+                    },
+                    {
+                        title: "",
+                        dataKey: "total"
                     }
                 ];
                 doc.autoTable(columns, rows, {
@@ -250,6 +262,10 @@
                     {
                         text: '技術加給',
                         value: 'tech'
+                    },
+                    {
+                        text: '金額',
+                        value: 'total'
                     },
                     {
                         text: '',
