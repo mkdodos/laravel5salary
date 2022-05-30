@@ -19,6 +19,11 @@ Route::get('/emp/basic/data', 'EmpBasicController@basicData');
 Route::get('/salary/index', 'SalaryController@index');
 Route::get('/salary/index/data', 'SalaryController@indexData');
 
+// 費用 view
+Route::get('/expense', 'ExpenseController@index');
+// 資料
+Route::get('/expense/data', 'ExpenseController@data');
+
 Route::post('/salary/update', 'SalaryController@update');
 Route::post('/salary/insert', 'SalaryController@insert');
 Route::post('/salary/destory', 'SalaryController@destory');
