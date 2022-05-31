@@ -7,9 +7,16 @@
     <v-main>
       <v-container>
         <v-text-field v-model="search"></v-text-field>
-        <v-data-table :items="rows" :headers="headers" :search="search" :loading="loading">
+        <v-btn @click="query">查詢</v-btn>
+        <v-data-table :items="rows" :headers="headers" :loading="loading">
+          <template v-slot:item.price="{item}">
+            ${trimZero(item.price)}
+          </template>
           <template v-slot:item.date="{ item }">
             ${item.date.slice(0,10)}
+          </template>
+          <template v-slot:item.amt="{ item }">
+            ${Math.round(item.price*item.qty)}
           </template>
         </v-data-table>
       </v-container>
@@ -43,35 +50,52 @@
         },
         {
           text: '金額',
-          value: 'amt'
+          value: 'price'
         },
         {
           text: '數量',
           value: 'qty'
-        }
+        },
+        {
+          text: '小計',
+          value: 'amt'
+        },
+        // {
+        //   text: 'test',
+        //   value: 'test'
+        // }
       ]
 
     },
     mounted() {
       this.loading = true
-      axios.get('expense/data', {
-        // params: {
-        //   name: '頂針'
-        // }
-      }).then((res) => {
-        // json 字串用""括起,如果內容有"符號,會出問題
-        // 要加 \ 跳脫
-        let text = "鋼質傘型頂針 5\"*MT4";
-
-        let position = text.search("Blue");
-        // console.log(position)
-        console.log(res.data)
+      axios.get('expense/data').then((res) => {
         this.rows = res.data
         this.loading = false
       })
     },
     methods: {
+      // 價格 xxx.0 去掉 .0
+      trimZero(price) {
+        let zeroAt = price.lastIndexOf("0");
+        let len = price.length;
+        if (zeroAt == len - 1)
+          return price.slice(0, len - 2)
+        else
+          return price
 
+      },
+      query() {
+        this.loading = true
+        axios.get('expense/data', {
+          params: {
+            name: this.search
+          }
+        }).then((res) => {
+          this.rows = res.data
+          this.loading = false
+        })
+      }
     },
   })
 </script>

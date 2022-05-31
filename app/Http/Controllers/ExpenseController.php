@@ -40,18 +40,16 @@ class ExpenseController extends Controller
 
 		
 		// 問題 id 42397 , 37603, 36760 不知什麼問題, 內容重新剪下貼上就好了
-		$query = " SELECT top 10000 ID,日期,品名,金額,進貨數量 FROM 費用表 ";
-		$keys = ['id', 'date', 'name','amt','qty'];
-		// $query = " SELECT top 5 ID,日期,品名 FROM 費用表 WHERE ID=5371 ";
-		// $query = " SELECT 品名 FROM 費用表 WHERE ID=5371 ";
+		// 可能是內容有被 enter 換成二行
+		$query = " SELECT top 5000 ID,日期,品名,金額,進貨數量 FROM 費用表 ";
+		$keys = ['id', 'date', 'name','price','qty'];		
 
 		if ($where) {
 			$query .= $where;
 		}
 
 		$query.= " order by ID desc";
-		// return $name;
-		// return $query;
+	
 
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
 		$rs = $db->query($query);
@@ -66,28 +64,18 @@ class ExpenseController extends Controller
 
 		for ($i = 0; $i < count($arr); $i++) {
 			$j = 0;
-			foreach ($arr[$i] as $key => $value) {
-				// 字串後面有空白導致無法正確輸出 json 格式, 加上 trim            
+			foreach ($arr[$i] as $key => $value) {				          
+				// json 字串用""括起,如果內容有"符號,會出問題
+        // 要加 \ 跳脫
 				$value = str_replace('"','\"',$value);
-				// $value = str_replace('*','\*',$value);
+				// 字串後面有空白導致無法正確輸出 json 格式, 加上 trim  				
 				$newarr[urlencode($keys[$j])] = urlencode(trim($value));
-				$j++;
-
-				// $mystring = 'abc';
-				// $findme   = 'a';
-				// $pos = strpos($value, '"');
-			
-				// echo $value."<br>";
-				// return $pos;
+				$j++;			
 			}
 
 			$rows[$i] = $newarr;
 		}
-		// print_r($arr);
-		// return;
-		// return $arr[0]['品名'];
-		// return $rows[0];
-		// array to json
+		
 		$json = json_encode($rows);
 
 		// 再用urldecode把資料轉回成中文格式
