@@ -41,14 +41,17 @@ class ExpenseController extends Controller
 		
 		// 問題 id 42397 , 37603, 36760 不知什麼問題, 內容重新剪下貼上就好了
 		// 可能是內容有被 enter 換成二行
-		$query = " SELECT top 5000 ID,日期,品名,金額,進貨數量 FROM 費用表 ";
-		$keys = ['id', 'date', 'name','price','qty'];		
+		$query = " SELECT top 50000 費用表.ID,日期,品名,金額,進貨數量,廠商名稱 FROM 費用表 LEFT JOIN 廠商資料表 ON 廠商資料表.廠商編號 = 費用表.廠商編號";
+		// $query = " SELECT top 50 費用表.ID, 日期, 費用表.品名, 費用表.金額, 進貨數量 FROM 廠商資料表 INNER JOIN 費用表 ON 廠商資料表.廠商編號 = 費用表.廠商編號
+		// ORDER BY 費用表.ID DESC
+		// ";
+		$keys = ['id', 'date', 'name','price','qty','supp'];		
 
 		if ($where) {
 			$query .= $where;
 		}
 
-		$query.= " order by ID desc";
+		$query.= " order by 費用表.ID desc";
 	
 
 		$query = mb_convert_encoding($query, "BIG5", "UTF-8");

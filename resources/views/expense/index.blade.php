@@ -45,6 +45,10 @@
           value: 'date'
         },
         {
+          text: '廠商',
+          value: 'supp'
+        },
+        {
           text: '品名',
           value: 'name'
         },
@@ -77,6 +81,7 @@
     methods: {
       // 價格 xxx.0 去掉 .0
       trimZero(price) {
+        // 判斷 0 出現在字串的最後, 再把 .0 去掉
         let zeroAt = price.lastIndexOf("0");
         let len = price.length;
         if (zeroAt == len - 1)
