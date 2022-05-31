@@ -7,7 +7,7 @@
     <v-main>
       <v-container>
         <v-text-field v-model="search"></v-text-field>
-        <v-data-table :items="rows" :headers="headers" :search="search">
+        <v-data-table :items="rows" :headers="headers" :search="search" :loading="loading">
           <template v-slot:item.date="{ item }">
             ${item.date.slice(0,10)}
           </template>
@@ -27,6 +27,7 @@
     delimiters: ['${', '}'],
     data: {
       search: '',
+      loading: false,
       rows: [],
       headers: [{
           text: 'ID',
@@ -39,11 +40,20 @@
         {
           text: '品名',
           value: 'name'
+        },
+        {
+          text: '金額',
+          value: 'amt'
+        },
+        {
+          text: '數量',
+          value: 'qty'
         }
       ]
 
     },
     mounted() {
+      this.loading = true
       axios.get('expense/data', {
         // params: {
         //   name: '頂針'
@@ -57,6 +67,7 @@
         // console.log(position)
         console.log(res.data)
         this.rows = res.data
+        this.loading = false
       })
     },
     methods: {

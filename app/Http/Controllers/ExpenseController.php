@@ -39,9 +39,9 @@ class ExpenseController extends Controller
 			$where = " where " . $where;
 
 		
-
-		$query = " SELECT top 35000 ID,日期,品名 FROM 費用表 ";
-
+		// 問題 id 42397 , 37603, 36760 不知什麼問題, 內容重新剪下貼上就好了
+		$query = " SELECT top 10000 ID,日期,品名,金額,進貨數量 FROM 費用表 ";
+		$keys = ['id', 'date', 'name','amt','qty'];
 		// $query = " SELECT top 5 ID,日期,品名 FROM 費用表 WHERE ID=5371 ";
 		// $query = " SELECT 品名 FROM 費用表 WHERE ID=5371 ";
 
@@ -49,6 +49,7 @@ class ExpenseController extends Controller
 			$query .= $where;
 		}
 
+		$query.= " order by ID desc";
 		// return $name;
 		// return $query;
 
@@ -56,7 +57,7 @@ class ExpenseController extends Controller
 		$rs = $db->query($query);
 		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);
 
-		$keys = ['id', 'date', 'name'];
+		
 		$json = "";
 
 
@@ -68,6 +69,7 @@ class ExpenseController extends Controller
 			foreach ($arr[$i] as $key => $value) {
 				// 字串後面有空白導致無法正確輸出 json 格式, 加上 trim            
 				$value = str_replace('"','\"',$value);
+				// $value = str_replace('*','\*',$value);
 				$newarr[urlencode($keys[$j])] = urlencode(trim($value));
 				$j++;
 
