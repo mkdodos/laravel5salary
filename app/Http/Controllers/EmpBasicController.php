@@ -96,4 +96,38 @@ class EmpBasicController extends Controller
 
 	
 	}
+
+	// 機台工作人員
+	public function worker()
+	{		
+		return view('emp/worker');
+	}
+
+	// 機台工作人員資料
+	public function workerData()
+	{				
+		$db = new \PDO("odbc:salary");
+		$keys = ['id', 'name'];
+		$query = " SELECT 工作人員編號,姓名 FROM 員工基本資料 WHERE 離職日 IS NULL ";
+		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
+		$rs = $db->query($query);
+		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);		
+		
+		$json = "";		
+		for ($i = 0; $i < count($arr); $i++) {
+			$j = 0;
+			foreach ($arr[$i] as $key => $value) {			        
+				$newarr[urlencode($keys[$j])] = urlencode(trim($value));
+				$j++;
+			}		
+			$rows[$i] = $newarr;
+		}
+		
+		$json = json_encode($rows);
+		
+		$json = urldecode($json);	
+
+		return response($json, 200)
+			->header('Content-Type', 'text/html;charset=big5');		
+	}
 }

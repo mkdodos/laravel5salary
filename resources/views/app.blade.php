@@ -49,6 +49,10 @@
 				</ul>
 
 				<ul class="nav navbar-nav">
+					<li><a href="{{ url('/emp/worker') }}">工作人員</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav">
 					<li><a href="{{ url('/salary/index') }}">薪資</a></li>
 				</ul>
 

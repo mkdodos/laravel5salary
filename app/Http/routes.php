@@ -12,9 +12,15 @@
 */
 
 Route::get('/', 'EmpBasicController@index');
-Route::get('/emp/basic', 'EmpBasicController@basic');
+
 // 員工基本資料
+Route::get('/emp/basic', 'EmpBasicController@basic');
 Route::get('/emp/basic/data', 'EmpBasicController@basicData');
+
+// 機台工作人員
+Route::get('/emp/worker', 'EmpBasicController@worker');
+Route::get('/emp/worker/data', 'EmpBasicController@workerData');
+
 // 薪資
 Route::get('/salary/index', 'SalaryController@index');
 Route::get('/salary/index/data', 'SalaryController@indexData');
