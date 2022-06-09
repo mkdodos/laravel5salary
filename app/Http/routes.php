@@ -21,6 +21,9 @@ Route::get('/emp/basic/data', 'EmpBasicController@basicData');
 Route::get('/emp/worker', 'EmpBasicController@worker');
 Route::get('/emp/worker/data', 'EmpBasicController@workerData');
 
+// 排程完工
+Route::get('/arrdone/data', 'ArrDoneController@getData');
+
 // 薪資
 Route::get('/salary/index', 'SalaryController@index');
 Route::get('/salary/index/data', 'SalaryController@indexData');
