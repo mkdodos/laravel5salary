@@ -22,7 +22,7 @@
               </v-btn>
               <v-btn elevation="2"></v-btn> -->
               
-              <v-col v-if="isLogin" class="red--text">
+              <v-col v-if="isLoginFail" class="red--text">
                 
                   登入失敗
                
@@ -78,7 +78,7 @@
       workerID: '',
       user: {},
       pwd: '',
-      isLogin: false,
+      isLoginFail: false,
 
     },
     delimiters: ['${', '}'],
@@ -103,10 +103,14 @@
           })
           .then((response) => {            
             console.log(response.data);
-            if(response.data > 0)
-            this.isLogin = false
+            // 成功
+            if(response.data > 0){
+              // this.isLoginFail = false
+              window.location.replace("http://www.w3schools.com");
+            }
+            // 失敗
             else
-            this.isLogin = true
+            this.isLoginFail = true
           })
         // if(this.user.name=='馬志賢' && this.pwd=='0304')
         // console.log('OK')
