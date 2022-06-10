@@ -20,7 +20,7 @@ Route::get('/emp/basic/data', 'EmpBasicController@basicData');
 // 機台工作人員
 Route::get('/emp/worker', 'EmpBasicController@worker');
 Route::get('/emp/worker/data', 'EmpBasicController@workerData');
-
+Route::post('/emp/worker/login','EmpBasicController@login');
 // 排程完工
 Route::get('/arrdone/data', 'ArrDoneController@getData');
 

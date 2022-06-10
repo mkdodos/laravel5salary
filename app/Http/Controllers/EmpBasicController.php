@@ -130,4 +130,25 @@ class EmpBasicController extends Controller
 		return response($json, 200)
 			->header('Content-Type', 'text/html;charset=big5');		
 	}
+
+	public function login() 
+	{
+		$db = new \PDO("odbc:salary");
+		$obj = json_decode(file_get_contents('php://input'));
+		$name = $obj->name;
+		$pwd = $obj->pwd;
+		$query = " SELECT * FROM 員工基本資料 WHERE 姓名='$name' 
+		AND 登入密碼='$pwd' ";
+		$query = mb_convert_encoding($query, "BIG5", "UTF-8");
+		$rs = $db->query($query);
+		$arr = $rs->fetchAll(\PDO::FETCH_ASSOC);	
+
+		
+
+		return count($arr);
+		
+		
+		return $obj->name;
+		return $obj->pwd;
+	}
 }

@@ -16,10 +16,18 @@
             </v-card-text>
 
             <v-card-actions>
+
               <!-- <v-btn text color="teal accent-4">
                 登入
               </v-btn>
               <v-btn elevation="2"></v-btn> -->
+              
+              <v-col v-if="isLogin" class="red--text">
+                
+                  登入失敗
+               
+              </v-col>
+              
               <v-col class="text-right">
                 <v-btn depressed color="primary" @click="login">
                   登入
@@ -68,12 +76,15 @@
     data: {
       rows: [],
       workerID: '',
-      user:{},
-      pwd:''
-        
+      user: {},
+      pwd: '',
+      isLogin: false,
+
     },
     delimiters: ['${', '}'],
     created() {
+      // 下拉選單包含姓名和工作人員編號
+      // 姓名做為登入後顯示用,工作人員編號做為完工時記錄到排程完工表
       axios.get('worker/data', {}).then((res) => {
         console.log(res.data);
         this.rows = res.data
@@ -82,16 +93,40 @@
         // });
       })
     },
-    methods:{
-      // 姓名,密碼
+    methods: {
+      // 姓名,密碼到後端做驗證
       login() {
+        axios
+          .post("worker/login", {
+            name: this.user.name,
+            pwd: this.pwd
+          })
+          .then((response) => {            
+            console.log(response.data);
+            if(response.data > 0)
+            this.isLogin = false
+            else
+            this.isLogin = true
+          })
         // if(this.user.name=='馬志賢' && this.pwd=='0304')
         // console.log('OK')
         // else
         // console.log('Fail')
-        console.log(this.user.id)
-        console.log(this.pwd)
-      }
+        // console.log(this.user.id)
+        // console.log(this.pwd)
+      },
+      deleteRow(item) {
+        axios
+          .post("destory", {
+            id: item.id
+          })
+          .then((response) => {
+            this.editedIndex = this.rows.indexOf(item);
+            this.rows.splice(this.editedIndex, 1);
+            console.log(response.data);
+          })
+      },
+
     }
   })
 </script>
